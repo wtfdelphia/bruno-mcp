@@ -1,13 +1,14 @@
 import fs from "fs";
 import path from "path";
 import { promises as fsPromises } from "fs";
+import { randomUUID } from "crypto";
 export async function withReportFile(prefix, extension, callback) {
     const buildDir = path.join(process.cwd(), 'build', 'reports');
     // Create reports directory if it doesn't exist
     if (!fs.existsSync(buildDir)) {
         await fsPromises.mkdir(buildDir, { recursive: true });
     }
-    const tempFile = path.join(buildDir, `${prefix}${Date.now()}${extension}`);
+    const tempFile = path.join(buildDir, `${prefix}${Date.now()}-${randomUUID()}${extension}`);
     try {
         return await callback(tempFile);
     }

@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { promises as fsPromises } from "fs";
+import { randomUUID } from "crypto";
 
 export async function withReportFile<T>(
   prefix: string,
@@ -14,7 +15,7 @@ export async function withReportFile<T>(
     await fsPromises.mkdir(buildDir, { recursive: true });
   }
 
-  const tempFile = path.join(buildDir, `${prefix}${Date.now()}${extension}`);
+  const tempFile = path.join(buildDir, `${prefix}${Date.now()}-${randomUUID()}${extension}`);
   
   try {
     return await callback(tempFile);

@@ -1,14 +1,17 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { z } from 'zod';
+import { createRequire } from 'module';
 import { BrunoRunner } from './runner.js';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import { RunCollectionSchema } from './types.js';
+const require = createRequire(import.meta.url);
+const packageJson = require('../package.json');
 export class BrunoServer {
     constructor() {
         this.server = new Server({
             name: "bruno-runner",
-            version: "1.0.0",
+            version: packageJson.version,
         }, {
             capabilities: {
                 tools: {},

@@ -14,7 +14,7 @@ An MCP (Model Context Protocol) server that enables running Bruno collections. T
 
 * Run Bruno collections using the Bruno CLI
 * Support for environment files
-* Support for environment variables
+* Support for environment variables as key-value pairs or `name=value` strings
 * Detailed test results including:
   * Overall success/failure status
   * Test summary (total, passed, failed)
@@ -40,6 +40,77 @@ npm install
 npm run build
 ```
 
+### Bruno CLI
+
+Bruno Desktop is used to create and edit Bruno collections. Bruno CLI provides the `bru` command for running those collections from a terminal, CI job, or MCP server.
+
+Install Bruno CLI globally if you want to run `bru` yourself:
+
+```bash
+npm install -g @usebruno/cli
+```
+
+Verify the installation:
+
+```bash
+bru --version
+```
+
+This MCP server also depends on `@usebruno/cli` locally, so a global Bruno CLI installation is optional when running this project with `npm ci` and `npm run build`.
+
+### Local npx Service
+
+To run this repository as a local MCP server through `npx`, build it first:
+
+```bash
+cd /path/bruno-mcp
+npm ci
+npm run build
+```
+
+Then configure your MCP client to run the local package path:
+
+```json
+{
+  "mcpServers": {
+    "bruno-runner-local": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "/path/bruno-mcp"
+      ]
+    }
+  }
+}
+```
+
+You can also register the package as a local command:
+
+```bash
+cd /path/bruno-mcp
+npm ci
+npm run build
+npm link
+```
+
+Then configure the MCP client to use the linked package:
+
+```json
+{
+  "mcpServers": {
+    "bruno-runner-local": {
+      "command": "npx",
+      "args": [
+        "--no-install",
+        "bruno-mcp"
+      ]
+    }
+  }
+}
+```
+
+Using the local package path is recommended because it does not depend on global `npm link` state.
+
 ## Configuration
 
 Add the server to your Claude desktop configuration file at `~/Library/Application Support/Claude/claude_desktop_config.json`:
@@ -64,8 +135,21 @@ Runs a Bruno collection and returns the test results.
 **Parameters:**
 
 * `collection` (required): Path to the Bruno collection
-* `environment` (optional): Path to environment file
-* `variables` (optional): Environment variables as key-value pairs
+* `environment` (optional): Bruno environment name
+* `variables` (optional): Environment variables as key-value pairs, or as `name=value` strings
+
+**Example Parameters:**
+
+```json
+{
+  "collection": "/path/to/collection/request.bru",
+  "environment": "local",
+  "variables": {
+    "baseUrl": "https://api.example.com",
+    "token": "secret-token"
+  }
+}
+```
 
 **Example Response:**
 

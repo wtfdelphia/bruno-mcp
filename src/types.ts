@@ -22,7 +22,10 @@ export interface BrunoRunResult {
 export const RunCollectionSchema = z.object({
   collection: z.string().describe("Path to the Bruno collection"),
   environment: z.string().optional().describe("Optional path to environment file"),
-  variables: z.array(z.string()).optional().describe("Optional environment variables"),
+  variables: z.union([
+    z.record(z.string()),
+    z.array(z.string())
+  ]).optional().describe("Optional environment variables as key-value pairs or name=value strings"),
 });
 
 export type RunCollectionParams = z.infer<typeof RunCollectionSchema>;

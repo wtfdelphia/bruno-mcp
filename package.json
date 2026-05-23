@@ -10,6 +10,8 @@
   "scripts": {
     "build": "tsc && chmod +x build/index.js",
     "clean": "rm -rf build",
+    "test": "tsc -p tsconfig.test.json && cp package.json .test-build/package.json && node --test .test-build/test/**/*.test.js",
+    "test:coverage": "tsc -p tsconfig.test.json && cp package.json .test-build/package.json && node --test --experimental-test-coverage .test-build/test/**/*.test.js",
     "lint": "eslint . --ext .ts",
     "prepare": "npm run build",
     "deploy": "npm run build && npm publish"

@@ -19,14 +19,14 @@ export interface BrunoRunResult {
 export declare const RunCollectionSchema: z.ZodObject<{
     collection: z.ZodString;
     environment: z.ZodOptional<z.ZodString>;
-    variables: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    variables: z.ZodOptional<z.ZodUnion<[z.ZodRecord<z.ZodString, z.ZodString>, z.ZodArray<z.ZodString, "many">]>>;
 }, "strip", z.ZodTypeAny, {
     collection: string;
     environment?: string | undefined;
-    variables?: string[] | undefined;
+    variables?: Record<string, string> | string[] | undefined;
 }, {
     collection: string;
     environment?: string | undefined;
-    variables?: string[] | undefined;
+    variables?: Record<string, string> | string[] | undefined;
 }>;
 export type RunCollectionParams = z.infer<typeof RunCollectionSchema>;
